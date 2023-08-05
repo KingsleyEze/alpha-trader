@@ -1,5 +1,8 @@
 <template>
-  <input class="text-field" />
+  <input
+    class="text-field"
+    aria-label="text-field"
+  >
 </template>
 
 <style lang="scss">
