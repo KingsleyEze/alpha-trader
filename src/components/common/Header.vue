@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <a href="/">
+    <a href="/public">
       <svg
         class="header-logo"
         viewBox="0 0 74 33"

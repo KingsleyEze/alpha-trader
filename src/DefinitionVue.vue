@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Header from "@/components/Header.vue";
-import TextField from "@/components/TextField.vue";
-import Card from "@/components/Card.vue";
-import Button from "@/components/Button.vue";
+import Header from "@/components/common/Header.js";
+import TextField from "@/components/form/TextField.js";
+import Card from "@/components/common/Card.js";
+import Button from "@/components/form/Button.js";
 import "@/index.css";
 </script>
 <template>
