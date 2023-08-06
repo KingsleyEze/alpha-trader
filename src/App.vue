@@ -59,10 +59,15 @@ onUnmounted(() => {
   });
 });
 
+const isIsinInWatchList = (isin: string): boolean => {
+  return !!activeWatchList.value.find((stock) => stock.isin === isin);
+};
+
 provide("watchList", {
   activeWatchList,
   addStockToWatchList,
   removeStockFromWatchList,
+  isIsinInWatchList,
 });
 </script>
 
