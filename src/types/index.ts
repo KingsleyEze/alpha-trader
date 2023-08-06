@@ -1,5 +1,5 @@
 export interface Stock {
-  isin: String;
+  isin: string;
   price: number;
   bid?: number;
   ask?: number;
