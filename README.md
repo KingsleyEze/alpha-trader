@@ -1,9 +1,4 @@
 # Alpha Trader
-## The Application
-
-In the interest of saving you some time, we provided a working [Vue](https://vuejs.org) application. This application
-also includes a small set of components for you to use. Please note, using these components is optional, you are welcome
-to change them in any way you want, you should only submit something you are comfortable with.
 
 ## Using this application
 
