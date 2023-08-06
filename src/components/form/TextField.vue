@@ -1,8 +1,20 @@
+<script setup lang="ts">
+import { defineProps } from "vue";
+
+defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+});
+</script>
 <template>
   <input
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
     class="text-field"
     aria-label="text-field"
-  >
+  />
 </template>
 
 <style lang="scss">
