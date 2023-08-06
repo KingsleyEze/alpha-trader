@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TextField from "@/components/form/TextField.vue";
-import Button from "@/components/form/Button.vue";
+import TextField from "../form/TextField.vue";
+import Button from "../form/Button.vue";
 import { ref, inject } from "vue";
 
 const { addStockToWatchList, isIsinInWatchList } = inject("watchList") as {

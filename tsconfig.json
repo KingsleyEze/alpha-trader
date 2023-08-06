@@ -17,9 +17,13 @@
     ],
     "skipLibCheck": true,
     "baseUrl": ".",
+    "composite": true,
     "paths": {
-      "*": ["types/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*.ts",
