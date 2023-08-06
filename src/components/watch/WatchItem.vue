@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
 import Card from "@/components/common/Card.vue";
 interface WatchItemProps {
   isin: string;
