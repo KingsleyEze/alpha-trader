@@ -1,19 +1,13 @@
 import { webSocket } from "rxjs/webSocket";
 import { tap, catchError, mergeMap } from "rxjs/operators";
-import { of, throwError, timer, Subject } from "rxjs";
+import { of, throwError, timer } from "rxjs";
 import { Ref, ref } from "vue";
-import { Stock } from "../types";
+import { Stock, IncomingWebSocketMessage, ConnectionStatus } from "../types";
 
-const WEB_SOCKET_URL = "ws://localhost:8425";
-const MAX_RETRIES = 5;
-const INITIAL_DELAY = 1000; // 1 second
-
-interface IncomingWebSocketMessage {
-  isin: string;
-  price: number;
-  bid?: number;
-  ask?: number;
-}
+const WEB_SOCKET_URL =
+  import.meta.env.VITE_WEB_SOCKET_URL || "ws://localhost:8425";
+const MAX_RETRIES = import.meta.env.VITE_MAX_RETRIES || 5;
+const INITIAL_DELAY = import.meta.env.VITE_INITIAL_DELAY || 1000;
 
 export const useStockWebSocket = () => {
   const activeWatchList: Ref<Stock[]> = ref([]);
@@ -35,8 +29,7 @@ export const useStockWebSocket = () => {
 
   const rawSocket$ = webSocket<any>(WEB_SOCKET_URL);
 
-  const connectionStatus: Ref<"connected" | "disconnected" | "reconnecting"> =
-    ref("disconnected");
+  const connectionStatus: Ref<ConnectionStatus> = ref("disconnected");
 
   const socket$ = rawSocket$.pipe(
     tap({
@@ -55,6 +48,7 @@ export const useStockWebSocket = () => {
       return of(err).pipe(
         mergeMap((error, retryCount) => {
           if (retryCount < MAX_RETRIES) {
+            // @ts-ignore
             const delayDuration = INITIAL_DELAY * Math.pow(2, retryCount);
             return timer(delayDuration);
           }
