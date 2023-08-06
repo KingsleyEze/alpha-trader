@@ -19,10 +19,14 @@ export const useStockWebSocket = () => {
 
     if (stock) {
       stock.price = message.price;
+      stock.bid = message.bid;
+      stock.ask = message.ask;
     } else {
       activeWatchList.value.push({
         isin: message.isin,
         price: message.price,
+        bid: message.bid,
+        ask: message.ask,
       });
     }
   };

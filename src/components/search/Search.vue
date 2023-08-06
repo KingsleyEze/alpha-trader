@@ -15,8 +15,35 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <TextField v-model="isin" placeholder="Placeholder" />
-    <Button>Watch</Button>
+  <form @submit.prevent="onSubmit" class="watch-form">
+    <TextField v-model="isin" placeholder="Enter ISIN" class="watch-input" />
+    <div class="button-wrapper">
+      <Button class="watch-button">Watch</Button>
+    </div>
   </form>
 </template>
+
+<style lang="scss">
+.watch-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.watch-input {
+  width: 100%;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.watch-button {
+  cursor: pointer;
+}
+</style>

@@ -31,7 +31,8 @@
   }
 
   .header-logo {
-    width: 60px;
+    width: 160px;
+    margin-bottom: 50px;
   }
 }
 </style>

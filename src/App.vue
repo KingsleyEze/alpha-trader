@@ -24,6 +24,8 @@ const addStockToWatchList = (isin: string): void => {
     activeWatchList.value.push({
       isin: isin,
       price: 0,
+      bid: 0,
+      ask: 0,
     });
     subscribeToInstrument(isin);
   }
@@ -70,10 +72,8 @@ provide("watchList", {
       <Header />
     </template>
     <template #content>
-      <div class="main">
-        <Search />
-        <WatchList />
-      </div>
+      <Search />
+      <WatchList />
     </template>
   </AppLayout>
 </template>
@@ -82,10 +82,5 @@ provide("watchList", {
   font-family: var(--font-regular);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.main {
-  max-width: var(--max-width);
-  margin: 0 auto;
 }
 </style>

@@ -62,6 +62,8 @@
   --color-secondary-orange3: rgba(255, 177, 24, 0.4);
 
   --max-width: 1200px;
+  --max-width-tablet: 991px;
+  --max-width-mobile: 767px;
 }
 
 html {
