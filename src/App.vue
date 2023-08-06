@@ -7,6 +7,7 @@ import WatchList from "@/components/watch/WatchList.vue";
 import "@/index.css";
 import { useStockWebSocket } from "./composables/useStockWebSocket";
 import { Stock } from "./types";
+import Alert from "@/components/common/Alert.vue";
 
 const {
   activeWatchList,
@@ -78,6 +79,7 @@ provide("watchList", {
     </template>
     <template #content>
       <Search />
+      <Alert :status="connectionStatus" />
       <WatchList />
     </template>
   </AppLayout>

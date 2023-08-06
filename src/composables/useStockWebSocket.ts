@@ -17,6 +17,10 @@ export const useStockWebSocket = () => {
       (stock) => stock.isin === message.isin,
     );
 
+    if (!message.isin || !message.price) {
+      return;
+    }
+
     if (stock) {
       stock.price = message.price;
       stock.bid = message.bid;
