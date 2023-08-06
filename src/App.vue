@@ -15,7 +15,7 @@ const {
   unsubscribeFromInstrument,
 } = useStockWebSocket();
 
-const updateWatchList = (isin: string): void => {
+const addStockToWatchList = (isin: string): void => {
   const existingStock = activeWatchList.value.find(
     (stock) => stock.isin === isin,
   );
@@ -26,6 +26,17 @@ const updateWatchList = (isin: string): void => {
       price: 0,
     });
     subscribeToInstrument(isin);
+  }
+};
+
+const removeStockFromWatchList = (isin: string): void => {
+  const existingStockIndex = activeWatchList.value.findIndex(
+    (stock) => stock.isin === isin,
+  );
+
+  if (existingStockIndex > -1) {
+    activeWatchList.value.splice(existingStockIndex, 1);
+    unsubscribeFromInstrument(isin);
   }
 };
 
@@ -48,9 +59,8 @@ onUnmounted(() => {
 
 provide("watchList", {
   activeWatchList,
-  updateWatchList,
-  subscribeToInstrument,
-  unsubscribeFromInstrument,
+  addStockToWatchList,
+  removeStockFromWatchList,
 });
 </script>
 

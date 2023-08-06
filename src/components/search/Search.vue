@@ -3,15 +3,14 @@ import TextField from "@/components/form/TextField.vue";
 import Button from "@/components/form/Button.vue";
 import { ref, inject } from "vue";
 
-const { updateWatchList } = inject("watchList") as {
-  updateWatchList: (isin: string) => void;
+const { addStockToWatchList } = inject("watchList") as {
+  addStockToWatchList: (isin: string) => void;
 };
 
 const isin = ref("");
 
 const onSubmit = () => {
-  console.log(isin.value);
-  updateWatchList(isin.value);
+  addStockToWatchList(isin.value);
 };
 </script>
 
