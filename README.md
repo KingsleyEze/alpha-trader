@@ -207,6 +207,59 @@ You would then receive a WebSocket stream with messages in the following format
 ```
 
 ---
+## Documentation
+### useStockWebSocket
+This hook establishes a WebSocket connection to receive real-time stock data updates.
+
+### Features
+Manage WebSocket connection status and retries.
+Handle incoming stock data messages.
+Expose functionality to subscribe and unsubscribe to specific stock instruments by their ISIN (International Securities Identification Number).
+
+### Dependencies
+
+**rxjs**: Utilized for managing the WebSocket stream and related transformations.
+**vue**: Provides reactive state management.
+
+## How to use
+
+**Import the hook:**
+
+`import { useStockWebSocket } from "path-to-the-hook";`
+
+#### **Within a Vue component:**
+
+`const { activeWatchList, connectionStatus, subscribeToInstrument, unsubscribeFromInstrument } = useStockWebSocket();
+`
+
+**Bind or utilize the returned data and methods in your component.**
+
+### Data and Methods
+
+`activeWatchList: Ref<Stock[]>`
+A reactive reference array that contains the stocks currently in the watchlist. Whenever a new stock message arrives from the WebSocket, it either updates the existing stock details in the list or pushes a new stock.
+
+`connectionStatus: Ref<ConnectionStatus>`
+A reactive reference that reflects the current status of the WebSocket connection. It can have values: "disconnected", "connected", or "reconnecting".
+
+`subscribeToInstrument(isin: string)`
+Sends a message to the WebSocket to subscribe to updates for a particular stock identified by its ISIN.
+
+`unsubscribeFromInstrument(isin: string)`
+Sends a message to the WebSocket to unsubscribe from updates for a particular stock identified by its ISIN.
+
+`Internals`
+handleIncomingMessage(message: IncomingWebSocketMessage)
+Handles each incoming WebSocket message. It checks if the stock exists in the activeWatchList. If it does, it updates the stock's details, otherwise, it adds the stock to the list.
+
+`rawSocket$: WebSocketSubject<any>`
+An RxJS WebSocketSubject that represents the raw WebSocket connection to the server.
+
+`socket$: Observable<any>`
+A derived observable from rawSocket$. It manages connection statuses and performs retries in case of failures. Retries occur with exponential back-off delays and up to a maximum retry count.
+
+
+---
 
 ## Questions
 
