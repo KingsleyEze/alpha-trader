@@ -1,5 +1,5 @@
 <template>
-  <button class="button" @click="$emit('buttonClick')">
+  <button class="button" @click="$emit('buttonClick')" aria-label="button">
     <span class="button-content">
       <slot />
     </span>
