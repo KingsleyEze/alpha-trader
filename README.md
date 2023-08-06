@@ -79,8 +79,18 @@ An RxJS WebSocketSubject that represents the raw WebSocket connection to the ser
 A derived observable from rawSocket$. It manages connection statuses and performs retries in case of failures. Retries occur with exponential back-off delays and up to a maximum retry count.
 
 
----
+## Possible Improvements
 
+If I had more time, I would have liked to:
+- Persist the watchlist in global store using Vuex or Pinia. This would allow the user to keep their watchlist even if they refresh the page.
+- Add a loading indicator to the button to add a stock
+- Add a loading indicator to the stock list
+- Add e2e tests using Cypress, actually added unit tests for core complex components.
+- Add more fun styling to the app
+
+---
+<details>
+<summary>Original Q and A </summary>
 ## Questions
 
 1. What happens in case the WebSocket disconnects? How would you go further to keep
@@ -151,3 +161,4 @@ A derived observable from rawSocket$. It manages connection statuses and perform
 
 Please zip your project and submit zip archive via the Greenhouse link attached to the email with the code challenge.
 Your dedicated recruiter will receive the notification about your submission and will send it for the team review.
+</details>
