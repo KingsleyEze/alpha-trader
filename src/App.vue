@@ -1,32 +1,106 @@
 <script setup lang="ts">
+import { webSocket } from "rxjs/webSocket";
+import { watchEffect, onUnmounted } from "vue";
+import { tap, catchError, mergeMap } from "rxjs/operators";
+import { of, throwError, timer } from "rxjs";
 import Header from "@/components/common/Header.vue";
 import AppLayout from "@/layout/AppLayout.vue";
 import Search from "@/components/search/Search.vue";
 import WatchList from "@/components/watch/WatchList.vue";
 import "@/index.css";
-import { computed, provide, Ref, ref } from "vue";
-import { Stock } from "@/types";
+import { provide, Ref, ref } from "vue";
+import { Stock } from "./types";
 
-const ISINList: Ref<string[]> = ref([]);
+const WEB_SOCKET_URL = "ws://localhost:8425";
+const MAX_RETRIES = 5;
+const INITIAL_DELAY = 1000; // 1 second
 
-const activeWatchList: Ref<Stock[]> = computed(() => {
-  return ISINList.value.map((isin) => {
-    return {
-      isin,
-      price: 0,
-    };
+interface IncomingWebSocketMessage {
+  isin: string;
+  price: number;
+  bid?: number;
+  ask?: number;
+}
+const activeWatchList: Ref<Stock[]> = ref([]);
+
+function handleIncomingMessage(message: IncomingWebSocketMessage) {
+  const stock = activeWatchList.value.find(
+    (stock) => stock.isin === message.isin,
+  );
+
+  if (stock) {
+    stock.price = message.price;
+  } else {
+    activeWatchList.value.push({
+      isin: message.isin,
+      price: message.price,
+    });
+  }
+}
+
+const rawSocket$ = webSocket<any>(WEB_SOCKET_URL);
+
+const socket$ = rawSocket$.pipe(
+  tap({
+    next: () => console.log("WebSocket connection successful."),
+    error: () =>
+      console.warn("WebSocket connection failed. Trying to reconnect..."),
+    complete: () => console.log("WebSocket connection closed."),
+  }),
+  catchError((err, caught) => {
+    console.error("Error in WebSocket stream:", err);
+
+    return of(err).pipe(
+      mergeMap((error, retryCount) => {
+        if (retryCount < MAX_RETRIES) {
+          const delayDuration = INITIAL_DELAY * Math.pow(2, retryCount);
+          return timer(delayDuration);
+        }
+        return throwError(() => new Error("Reached maximum retries"));
+      }),
+    );
+  }),
+);
+
+watchEffect(() => {
+  const subscription = socket$.subscribe({
+    next: (message: IncomingWebSocketMessage) => handleIncomingMessage(message),
+    error: (err) => console.error("WebSocket final error:", err),
   });
+
+  onUnmounted(() => subscription.unsubscribe());
 });
 
-const updateWatchList = (isin: string) => {
-  ISINList.value.push(isin);
-};
+function updateWatchList(isin: string) {
+  const stockExists = activeWatchList.value.some(
+    (stock) => stock.isin === isin,
+  );
+
+  if (!stockExists) {
+    activeWatchList.value.push({
+      isin: isin,
+      price: 0,
+    });
+    subscribeToInstrument(isin);
+  }
+}
+
+function subscribeToInstrument(isin: string) {
+  rawSocket$.next({ subscribe: isin });
+}
+
+function unsubscribeFromInstrument(isin: string) {
+  rawSocket$.next({ unsubscribe: isin });
+}
 
 provide("watchList", {
   activeWatchList,
   updateWatchList,
+  subscribeToInstrument,
+  unsubscribeFromInstrument,
 });
 </script>
+
 <template>
   <AppLayout>
     <template #header>
